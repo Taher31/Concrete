@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Compressive Strength</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="..\static\css/w3.css">
+    </head>
+<body>
+
+    <div class="w3-top">
+        <div class="w3-bar w3-white w3-wide w3-padding w3-card">
+            <a href="#home" class="w3-bar-item w3-button"><b>Concrete</b> Calculator</a>
+            <div class="w3-right w3-hide-small">
+                <a href="#Calculator" class="w3-bar-item w3-button">Calculator</a>
+                <a href="#Abstract" class="w3-bar-item w3-button">Abstract</a>
+                <a href="#about" class="w3-bar-item w3-button">About us</a>
+            </div>
+        </div>
+    </div>
+
+    <header class="w3-display-container w3-content w3-wide" style="max-width:1500px;" id="home">
+        <img class="w3-image" src="..\static\photo_html\R.jpg" alt="Architecture" width="1500" height="800" style="width:100%; border: 8px solid black;">
+        <div class="w3-display-middle w3-margin-top w3-center">
+            <h1 class="w3-xxlarge w3-text-white"><span class="w3-padding w3-black w3-opacity-min"><b>Concrete</b></span> <span
+                    class="w3-hide-small w3-text-light-grey">Calculator</span></h1>
+        </div>
+    </header>
+
+    <div class="w3-content w3-padding" style="max-width:1564px">
+        <div class="w3-container w3-padding-32" id="Calculator"></div>
+        <h2 class="w3-border-bottom w3-border-light-grey w3-padding-16">Calculator</h2>
+        <h3>Enter the value of your sample Concrete</h3>
+     
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f2f2f2;
+                margin: 0;
+                padding: 0;
+            }
+            form {
+                width: 80%;
+                margin: 20px auto;
+            }
+            label {
+                font-weight: bold;
+                display: inline-block; /* Display label and select next to each other */
+                width: 30%; /* Adjust width as needed */
+            }
+            select {
+                width: 65%; /* Adjust width as needed */
+                padding: 15px;
+                margin-top: 5px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+                display: inline-block; /* Display label and select next to each other */
+            }
+        </style>
+        <form id="model-selection" method="post" action="/predict-compressive-strength">
+            <label for="model">Select your model:</label>
+            <select id="model" name="ai_model">
+                {% for model_name in models %}
+                <option value="{{ model_name }}">{{model_name}}</option>
+                {% endfor %}
+            </select>
+        </form>
+            <table>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f2f2f2;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    table {
+                        border-collapse: collapse;
+                        width: 80%;
+                        margin: 20px auto;
+                    }
+                    th, td {
+                        padding: 10px;
+                        text-align: left;
+                        border-bottom: 1px solid #ddd;
+                    }
+                    h4 {
+                        margin: 0;
+                    }
+                    input[type="number"] {
+                        width: 100%;
+                        padding: 8px;
+                        border: 1px solid #ccc;
+                        border-radius: 4px;
+                        box-sizing: border-box;
+                        margin-top: 5px;
+                    }
+                    button {
+                        background-color: #000000;
+                        color: white;
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        display: block;
+                        margin: 20px auto;
+                    }
+                    button:hover {
+                        background-color: #45a049;
+                    }
+                    #result, #error {
+                        text-align: center;
+                        margin-top: 20px;
+                    }
+                </style>
+                <tr>
+                    <td><h4>Value of Cement (kg/m³):</h4></td>
+                    <td><input type="number" id="Cement" value="400" required></td>
+                </tr>
+                <tr>
+                    <td><h4>Value of Blast Furnace Slag (kg/m³):</h4></td>
+                    <td><input type="number" id="Blast" value="80" required></td>
+                </tr>
+                <tr>
+                    <td><h4>Value of Fly Ash (kg/m³):</h4></td>
+                    <td><input type="number" id="Ash" value="0" required></td>
+                </tr>
+                <tr>
+                    <td><h4>Value of superplasticizer (kg/m³):</h4></td>
+                    <td><input type="number" id="Superplasticizer" value="1" required></td>
+                </tr>
+                <tr>
+                    <td><h4>Value of Water (kg/m³):</h4></td>
+                    <td><input type="number" id="Water" value="200" required></td>
+                </tr>
+                <tr>
+                    <td><h4>Value of Coarse Aggregate (kg/m³):</h4></td>
+                    <td><input type="number" id="Coarse" value="100" required></td>
+                </tr>
+                <tr>
+                    <td><h4>Value of Fine Aggregate (kg/m³):</h4></td>
+                    <td><input type="number" id="Fine" value="600" required></td>
+                </tr>
+                <tr>
+                    <td><h4>Value of Age (day):</h4></td>
+                    <td><input type="number" id="Age" value="28" required></td>
+                </tr>
+            </table>
+            <button id="calculate-button">Calculate</button>
+            <div id="result"></div>
+            <div id="error"></div>
+
+
+        <div class="w3-container w3-padding-32" id="Abstract"></div>
+        <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Abstract</h3>
+        <p>Concrete is a widely used construction material known for its strength, durability, and versatility. Accurate prediction of concrete compressive strength is crucial for ensuring the safety and reliability of structures. In recent years, machine learning techniques, including neural networks, have gained prominence in predicting concrete properties. This article explores the application of neural network models and other machine learning algorithms for predicting the compressive strength of concrete. We discuss the methodology, data preprocessing, model training, and evaluation. The results demonstrate the effectiveness of these models in enhancing prediction accuracy and reducing the need for labor-intensive and time-consuming laboratory tests.
+        </p>
+
+        <div class="w3-container w3-padding-32" id="about">
+            <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">About us</h3>
+            <p>This article was written by Seyed Taher Yaqoubi and Mohammad Reza Farkhandeh. Both of us are civil and environmental engineering students from Sharif University of Technology and we are interested in data analysis and artificial intelligence.
+            </p>
+        </div>
+
+        <div class="w3-row-padding w3-grayscale">
+            <div class="container">
+                
+                <style>
+                    .container {
+                        display: flex;
+                        justify-content: center;
+                    }
+
+                    .w3-col {
+                        margin: 0 15px; /* Add margin between the columns */
+                    }
+
+                    .w3-col img {
+                        display: block; /* Ensure images are block elements */
+                        width: 100%;
+                    }
+
+                    @media screen and (max-width: 768px) {
+                        .container {
+                            flex-direction: column; /* Stack columns vertically on smaller screens */
+                        }
+                    }
+                </style>
+                <div class="container">
+                    <div class="w3-col l3 m6 w3-margin-bottom">
+                        <img src="..\static\photo_html\IMG_20240306_123215.jpg" alt="Taher" style="width:100%">
+                        <h3>Seyyed Taher Yaghoubi</h3>
+                        <p class="w3-opacity">Student</p>
+                        <p>Civil and environment engineering student interested in data analysis and artificial intelligence.</p>
+                        <!--<p><button class="w3-button w3-light-grey w3-block">Contact</button></p>-->
+                        <a href="https://www.linkedin.com/in/seyyed-taher-yaghoubi-60490b194/" target="_blank">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/LinkedIn_logo_initials.png/120px-LinkedIn_logo_initials.png" alt="LinkedIn" style="width: 30px; height: 30px;">
+                        </a>
+                        <a href="mailto:yaghoubiseidtaher@example.com" target="_blank">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Gmail_Icon.png/64px-Gmail_Icon.png" alt="Gmail" style="width: 30px; height: 30px;">
+                        </a>
+                    </div>
+                    
+
+                    <div class="w3-col l3 m6 w3-margin-bottom">
+                        <img src="..\static\photo_html\IMG_20240306_123222.jpg" alt="Mohammad" style="width:100%">
+                        <h3>Mohammad Reza Farkhande </h3>
+                        <p class="w3-opacity">Student</p>
+                        <p>فرمانده اسفراین.</p>
+                        <a href="https://www.linkedin.com/in/seyyed-taher-yaghoubi-60490b194/" target="_blank">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" style="width: 30px; height: 30px;">
+                        </a>
+                    </div>
+                </div>
+                
+            </div>
+
+        <div class="w3-container w3-padding-32" id="contact">
+        <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Contact us </h3>
+        <p>Let's get in touch and talk about your next project.</p>
+        <div class="w3-row">
+            <div class="w3-col s2">
+                <i class="fa fa-envelope" style="font-size:24px"></i>
+            </div>
+            <div class="w3-col s10">
+                <p style="font-size: 20px;"><a href="mailto:yaghoubiseidtaher@gmail.com" class="w3-text-black">yaghoubiseidtaher@gmail.com</a></p>
+            </div>
+            <div class="w3-col s2">
+                <i class="fa fa-linkedin" style="font-size:24px"></i>
+            </div>
+            <div class="w3-col s10">
+                <p style="font-size: 20px;"><a href="https://www.linkedin.com/in/seyyed-taher-yaghoubi-60490b194/" class="w3-text-black">LinkedIn Profile</a></p>
+            </div>
+        </div>
+    </div>
+
+        </div>
+
+        <div class="w3-container">
+            <img src="..\static\photo_html\1554228749553.webp" class="w3-image" style="width:100%; border: 8px solid black;">
+        </div>
+
+    </div>
+
+
+    <footer class="w3-center w3-black w3-padding-16">
+        <p class="w3-small">Thank U!</p>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#calculate-button").click(function(event) {
+                event.preventDefault();
+
+                const model_name = $("#model").val();
+                const cement = parseFloat($("#Cement").val());
+                const blast = parseFloat($("#Blast").val());
+                const ash = parseFloat($("#Ash").val());
+                const superplasticizer = parseFloat($("#Superplasticizer").val());
+                const water = parseFloat($("#Water").val());
+                const coarse = parseFloat($("#Coarse").val());
+                const fine = parseFloat($("#Fine").val());
+                const age = parseFloat($("#Age").val());
+
+                const data = {
+                    "model_name": model_name,
+                    "data": {
+                        "Cement": cement,
+                        "Blast": blast,
+                        "Ash": ash,
+                        "Superplasticizer": superplasticizer,
+                        "Water": water,
+                        "Coarse": coarse,
+                        "Fine": fine,
+                        "Age": age
+                    }
+                };
+
+                $.ajax({
+                    url: "/predict-compressive-strength",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.hasOwnProperty("prediction")) {
+                            $("#result").text("Predicted Strength: " + response.prediction);
+                            $("#error").text("");
+                        } else {
+                            $("#result").text("");
+                            $("#error").text(response.error);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        $("#result").text("");
+                        $("#error").text("Error: " + textStatus + " - " + errorThrown);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
